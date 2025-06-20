@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="ITF_Actuator" Id="{d20148bd-fb54-4987-a2f5-6ed5b6f075de}">
+    <Declaration><![CDATA[INTERFACE ITF_Actuator
+]]></Declaration>
+    <Folder Name="Methods" Id="{7e00d6e6-8714-414d-86fb-f3a31f687736}" />
+    <Folder Name="Properties" Id="{0f9b9193-2187-4ab0-aee6-f55532e80ee4}" />
+    <Method Name="Advance" Id="{e1872d33-0934-40fc-abcc-5017c8e66648}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD Advance
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="P_Advanced" Id="{60cf6693-3f78-4700-9cd6-17e9a60c3593}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_Advanced : BOOL]]></Declaration>
+      <Get Name="Get" Id="{660e5fe7-4dff-47b0-a908-e3f8c27e919c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="P_OperatorControl" Id="{2fb28d7f-2749-44b8-992b-9e5915adc993}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_OperatorControl : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c3a5eeea-7f03-443e-9473-12d316facb0e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{3c48ec13-f4bc-4732-a747-381ac5966439}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="P_OperatorValue" Id="{9b95ce3b-e9c4-4417-8ca0-76c05f4fa5d2}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_OperatorValue : E_State]]></Declaration>
+      <Get Name="Get" Id="{f0dcbe40-bfbc-4aa2-8ad0-add79c12e432}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{1c725391-c913-4d99-ac8b-96f837fd61b4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="P_Retracted" Id="{609d519f-1d8c-4864-bd7d-50c6f28153fc}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_Retracted : BOOL]]></Declaration>
+      <Get Name="Get" Id="{d2ac7f15-dbe8-4a6f-9446-24003236a7cd}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Retract" Id="{cb0ee7f0-3202-4ce7-907c-31b917761528}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD Retract
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

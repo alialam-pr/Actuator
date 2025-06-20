@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_Actuator_NoFeedback" Id="{961f5635-0748-4d42-a48e-76bb5fb40e45}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Actuator_NoFeedback
+VAR
+	AdvanceOUT		: FB_DigitalOutput;
+	RetractOUT		: FB_DigitalOutput;
+	
+	AdvanceBit			: BOOL := FALSE;
+	RetractBit			: BOOL := FALSE;
+	
+	Advanced		: BOOL := FALSE;
+	Retracted		: BOOL := FALSE;
+	
+	AdvanceTimer	: TON;
+	RetractTimer	: TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[AdvanceOUT();
+RetractOUT();
+
+AdvanceTimer(IN := AdvanceBit, PT := T#0.06S);
+AdvanceOUT.SetOutput(AdvanceTimer.Q);
+Advanced := AdvanceOUT.P_Output;
+
+RetractTimer(IN := RetractBit, PT := T#0.06S);
+RetractOUT.SetOutput(RetractTimer.Q);
+Retracted := RetractOUT.P_Output;
+]]></ST>
+    </Implementation>
+    <Folder Name="Methods" Id="{bdd8ad22-4375-4ffc-b229-f074dd9c4af4}" />
+    <Folder Name="Properties" Id="{ab013551-f43d-4387-b701-c63914ec184a}" />
+    <Method Name="Advance" Id="{a130657e-8b41-4df2-b160-32a3e49d213c}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD PUBLIC Advance : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RetractOUT.SetOutput(FALSE);
+RetractBit := FALSE;
+Advance := TRUE;
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="P_Advanced" Id="{af95aa15-9288-40d6-8172-f305b3908d89}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_Advanced : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{c970a032-32a7-4450-89f4-27cb6eef00c2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[P_Advanced := Advanced;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="P_Retracted" Id="{310df0ce-3fcd-4a40-9448-568383b77778}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_Retracted : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{97a67513-e1f0-4d7b-b95e-ee5375389c57}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[P_Retracted := Retracted;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Retract" Id="{dd9f7d52-b76a-457a-abbe-88f9c9c8ffcb}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD PUBLIC Retract : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AdvanceOUT.SetOutput(FALSE);
+Retract := TRUE;
+AdvanceBit := FALSE;
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

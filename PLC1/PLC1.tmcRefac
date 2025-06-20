@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Refactors>
+  <Renames>
+    <RenamedType>
+      <Type guid="961f5635-0748-4d42-a48e-76bb5fb40e45">FB_SIMPLEACTUATOR_NOFEEDBACK</Type>
+      <From>FB_ActuatorSimple_NoFeedback</From>
+      <To>FB_Actuator_NoFeedback</To>
+    </RenamedType>
+    <RenamedType>
+      <Type guid="801d48b9-2a03-40e7-ad0e-7a6554a9514a">FB_ACTUATOR_FEEDBACK</Type>
+      <From>FB_Actuator_Feedback</From>
+      <To>FB_Actuator</To>
+    </RenamedType>
+    <RenamedSymbol>
+      <Type guid="801d48b9-2a03-40e7-ad0e-7a6554a9514a">FB_Actuator</Type>
+      <From>Advance</From>
+      <To>AdvanceBit</To>
+    </RenamedSymbol>
+    <RenamedSymbol>
+      <Type guid="801d48b9-2a03-40e7-ad0e-7a6554a9514a">FB_Actuator</Type>
+      <From>Retract</From>
+      <To>RetractBit</To>
+    </RenamedSymbol>
+    <RenamedSymbol>
+      <Type guid="6b76a1bc-68d4-4416-b877-0ea862f2e1cc">E_State</Type>
+      <From>Retracted</From>
+      <To>Retract</To>
+    </RenamedSymbol>
+    <RenamedSymbol>
+      <Type guid="6b76a1bc-68d4-4416-b877-0ea862f2e1cc">E_State</Type>
+      <From>Advanced</From>
+      <To>Advance</To>
+    </RenamedSymbol>
+    <RenamedSymbol>
+      <Type guid="961f5635-0748-4d42-a48e-76bb5fb40e45">FB_Actuator_NoFeedback</Type>
+      <From>Advance</From>
+      <To>AdvanceBit</To>
+    </RenamedSymbol>
+    <RenamedSymbol>
+      <Type guid="961f5635-0748-4d42-a48e-76bb5fb40e45">FB_Actuator_NoFeedback</Type>
+      <From>Retract</From>
+      <To>RetractBit</To>
+    </RenamedSymbol>
+  </Renames>
+</Refactors>

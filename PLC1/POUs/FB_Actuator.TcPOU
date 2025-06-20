@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_Actuator" Id="{801d48b9-2a03-40e7-ad0e-7a6554a9514a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Actuator IMPLEMENTS ITF_Actuator
+VAR
+	AdvanceBit			: BOOL := FALSE;
+	RetractBit			: BOOL := FALSE;
+	
+	AdvanceTimer	: TON;
+	RetractTimer	: TON;
+	
+	{ attribute 'TcHmiSymbol.AddSymbol' }
+	OperatorControl	: BOOL := FALSE;
+	
+	{ attribute 'TcHmiSymbol.AddSymbol' }
+	OperatorValue	: E_State;
+END_VAR
+
+VAR_INPUT
+	{ attribute 'TcHmiSymbol.AddSymbol' }
+	Advanced		: FB_DigitalInput;
+	{ attribute 'TcHmiSymbol.AddSymbol' }
+	Retracted		: FB_DigitalInput;
+	{ attribute 'TcHmiSymbol.AddSymbol' }
+	AdvanceOUT		: FB_DigitalOutput;
+	{ attribute 'TcHmiSymbol.AddSymbol' }
+	RetractOUT		: FB_DigitalOutput;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[AdvanceOUT();
+RetractOUT();
+
+Advanced();
+Retracted();
+
+AdvanceTimer(IN := AdvanceBit, PT := T#0.06S);
+AdvanceOUT.SetOutput(AdvanceTimer.Q);
+
+RetractTimer(IN := RetractBit, PT := T#0.06S);
+RetractOUT.SetOutput(RetractTimer.Q);
+
+IF Advanced.P_Value THEN
+	OperatorValue := E_State.Advance;
+ELSIF Retracted.P_Value THEN
+	OperatorValue := E_State.Retract;
+END_IF
+
+IF OperatorControl THEN
+	IF OperatorValue = E_State.Advance THEN
+		Advance();
+	ELSIF OperatorValue = E_State.Retract THEN
+		Retract();
+	END_IF
+END_IF]]></ST>
+    </Implementation>
+    <Folder Name="Methods" Id="{e1218f82-608a-4612-b7fc-8bee389e1376}" />
+    <Folder Name="Properties" Id="{45f78a4f-dbfe-4094-b321-f7434392df06}" />
+    <Method Name="Advance" Id="{e32a0885-2c88-4733-b66e-9be8b3841b33}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD Advance
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RetractOUT.SetOutput(FALSE);
+RetractBit := FALSE;
+AdvanceBit := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="P_Advanced" Id="{28164b35-a2e9-428c-a89a-c4d9c7d896ed}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_Advanced : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{6930b750-5574-4f1d-81da-db6e02241df9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[P_Advanced := Advanced.P_Value;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="P_OperatorControl" Id="{bca32f3c-f1c5-4276-b40b-068851080a38}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_OperatorControl : BOOL]]></Declaration>
+      <Get Name="Get" Id="{dbe7d2be-9f35-4f7e-bf3a-add9325190d1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[P_OperatorControl := OperatorControl;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{f69bb334-d219-474e-91ad-1dc5b4050baf}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[OperatorControl := P_OperatorControl;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="P_OperatorValue" Id="{c58f1bf1-35b1-445e-8311-b593a5a0b576}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_OperatorValue : E_State]]></Declaration>
+      <Get Name="Get" Id="{795c3b5d-0137-4afd-895e-3da17e165b0c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[P_OperatorValue := OperatorValue;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{39374a3e-ce01-4171-90bb-a2c2aab1ded2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[OperatorValue := P_OperatorValue;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="P_Retracted" Id="{6f8b76f0-7809-4e03-bb50-a652494c777d}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY P_Retracted : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{b3c98f22-73e2-4670-a813-a8981ba1aa4b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[P_Retracted := Retracted.P_Value;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Retract" Id="{ab3b65ce-ede5-4f7b-87c5-83a5a71a87fa}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD Retract
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AdvanceOUT.SetOutput(FALSE);
+RetractBit := TRUE;
+AdvanceBit := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

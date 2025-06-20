@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_MultiActuator_NoFeedback" Id="{d05c1bbd-636f-44b6-915c-efafb64a4c0d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_MultiActuator_NoFeedback
+VAR_GENERIC CONSTANT
+	LenActuators : UDINT := 1;
+END_VAR
+VAR
+	Actuator : ARRAY[0..LenActuators-1] OF FB_Actuator_NoFeedback;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
