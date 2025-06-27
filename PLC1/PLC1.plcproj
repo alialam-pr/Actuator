@@ -22,10 +22,10 @@
     <POUsForPropertyAccessIncluded>false</POUsForPropertyAccessIncluded>
     <GlobalVersionStructureIncluded>false</GlobalVersionStructureIncluded>
     <Title>Actuator</Title>
-    <ProjectVersion>0.0.4</ProjectVersion>
+    <ProjectVersion>0.0.5</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="POUs\E_State.TcDUT">
+    <Compile Include="POUs\E_ActuatorState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Actuator.TcPOU">
@@ -71,7 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <PlaceholderResolution Include="DigitalInput">
-      <Resolution>DigitalInput, 0.0.4 (Promise Robotics)</Resolution>
+      <Resolution>DigitalInput, 0.0.5 (Promise Robotics)</Resolution>
     </PlaceholderResolution>
     <PlaceholderResolution Include="DigitalOutput">
       <Resolution>DigitalOutput, 0.0.3 (Promise Robotics)</Resolution>

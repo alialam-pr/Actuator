@@ -3,36 +3,36 @@
   <POU Name="FB_Actuator" Id="{801d48b9-2a03-40e7-ad0e-7a6554a9514a}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Actuator IMPLEMENTS ITF_Actuator
 VAR
-	AdvanceBit			: BOOL := FALSE;
-	RetractBit			: BOOL := FALSE;
+	AdvanceBit		: BOOL := FALSE;
+	RetractBit		: BOOL := FALSE;
 	
 	AdvanceTimer	: TON;
 	RetractTimer	: TON;
 	
 	{ attribute 'TcHmiSymbol.AddSymbol' }
-	OperatorControl	: BOOL := FALSE;
+	OperatorControl	: BOOL := FALSE; //HMI Operator Control (Actuator state reverts to original state when out of Op control)
+	OpControlFTRIG	: F_TRIG;
 	
 	{ attribute 'TcHmiSymbol.AddSymbol' }
-	OperatorValue	: E_State;
+	OperatorValue	: E_ActuatorState; //HMI Operator Value
+	HeldValue		: E_ActuatorState;
+	
+	HardwareOverride	: BOOL; //For engineering actuator overriding
+	OverrideValue		: E_ActuatorState; //Override Value
 END_VAR
 
 VAR_INPUT
-	{ attribute 'TcHmiSymbol.AddSymbol' }
-	Advanced		: FB_DigitalInput;
-	{ attribute 'TcHmiSymbol.AddSymbol' }
-	Retracted		: FB_DigitalInput;
-	{ attribute 'TcHmiSymbol.AddSymbol' }
+	AdvancedIN		: FB_DigitalInput;
+	RetractedIN		: FB_DigitalInput;
 	AdvanceOUT		: FB_DigitalOutput;
-	{ attribute 'TcHmiSymbol.AddSymbol' }
 	RetractOUT		: FB_DigitalOutput;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[AdvanceOUT();
 RetractOUT();
 
-Advanced();
-Retracted();
+AdvancedIN();
+RetractedIN();
 
 AdvanceTimer(IN := AdvanceBit, PT := T#0.06S);
 AdvanceOUT.SetOutput(AdvanceTimer.Q);
@@ -40,16 +40,38 @@ AdvanceOUT.SetOutput(AdvanceTimer.Q);
 RetractTimer(IN := RetractBit, PT := T#0.06S);
 RetractOUT.SetOutput(RetractTimer.Q);
 
-IF Advanced.P_Value THEN
-	OperatorValue := E_State.Advance;
-ELSIF Retracted.P_Value THEN
-	OperatorValue := E_State.Retract;
+//Retain value prior to going into operator control
+OpControlFTRIG(CLK := OperatorControl);
+IF OpControlFTRIG.Q THEN
+	IF HeldValue = E_ActuatorState.Advance THEN
+		Advance();
+	ELSIF HeldValue = E_ActuatorState.Retract THEN
+		Retract();
+	END_IF
+END_IF
+
+IF NOT OperatorControl AND NOT HardwareOverride AND AdvancedIN.P_Value THEN
+	OperatorValue 	:= E_ActuatorState.Advance;
+	OverrideValue	:= E_ActuatorState.Advance;
+	HeldValue 		:= E_ActuatorState.Advance;
+ELSIF NOT OperatorControl AND NOT HardwareOverride AND RetractedIN.P_Value THEN
+	OperatorValue 	:= E_ActuatorState.Retract;
+	OverrideValue	:= E_ActuatorState.Retract;
+	HeldValue 		:= E_ActuatorState.Retract;
 END_IF
 
 IF OperatorControl THEN
-	IF OperatorValue = E_State.Advance THEN
+	IF OperatorValue = E_ActuatorState.Advance THEN
 		Advance();
-	ELSIF OperatorValue = E_State.Retract THEN
+	ELSIF OperatorValue = E_ActuatorState.Retract THEN
+		Retract();
+	END_IF
+END_IF
+
+IF HardwareOverride THEN
+	IF OverrideValue = E_ActuatorState.Advance THEN
+		Advance();
+	ELSIF OverrideValue = E_ActuatorState.Retract THEN
 		Retract();
 	END_IF
 END_IF]]></ST>
@@ -73,7 +95,7 @@ AdvanceBit := TRUE;]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[P_Advanced := Advanced.P_Value;]]></ST>
+          <ST><![CDATA[P_Advanced := AdvancedIN.P_Value;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -97,7 +119,7 @@ END_VAR
       </Set>
     </Property>
     <Property Name="P_OperatorValue" Id="{c58f1bf1-35b1-445e-8311-b593a5a0b576}" FolderPath="Properties\">
-      <Declaration><![CDATA[PROPERTY P_OperatorValue : E_State]]></Declaration>
+      <Declaration><![CDATA[PROPERTY P_OperatorValue : E_ActuatorState]]></Declaration>
       <Get Name="Get" Id="{795c3b5d-0137-4afd-895e-3da17e165b0c}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -123,7 +145,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[P_Retracted := Retracted.P_Value;]]></ST>
+          <ST><![CDATA[P_Retracted := RetractedIN.P_Value;]]></ST>
         </Implementation>
       </Get>
     </Property>

@@ -41,5 +41,10 @@
       <From>Retract</From>
       <To>RetractBit</To>
     </RenamedSymbol>
+    <RenamedType>
+      <Type guid="6b76a1bc-68d4-4416-b877-0ea862f2e1cc">E_STATE</Type>
+      <From>E_State</From>
+      <To>E_ActuatorState</To>
+    </RenamedType>
   </Renames>
 </Refactors>
